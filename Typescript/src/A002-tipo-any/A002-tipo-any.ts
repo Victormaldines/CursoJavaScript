@@ -1,6 +1,6 @@
 // TIPO ANY (evitar)
 // Any -> Qualquer tipo, geralmente ocorre quando o TypeScript não consegue aplicar a inferência de tipo
-
+/*
 // any explícito
 function showMessage(msg: any) {
   return msg;
@@ -27,3 +27,4 @@ function showMessage3(msg: string) {
 console.log(showMessage3('Orba'));
 
 export default true;
+*/

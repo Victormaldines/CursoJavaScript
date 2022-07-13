@@ -28,3 +28,5 @@ input.focus();
 // Funciona, mas improvável de implementação útil
 // const body5 = document.querySelector('body') as unknown as number;
 // body5.style.background('orange');
+
+export default true;
