@@ -155,11 +155,11 @@ belle.equipItem(
 belle.attack(kadum);
 /**
  * Kadum: 1, 2, 1, -16 *morreu* f ;-;
- * Belle: 2, 1, 2, 6
+ * Belle: 32, 1, 2, 6
  */
 
 belle.attack(kadum);
 /**
  * Kadum: 1, 2, 1, -16 *já está morto*
- * Belle: 2, 1, 2, 6
+ * Belle: 32, 1, 2, 6
  */
