@@ -2,7 +2,7 @@ const path = require('path');
 
 module.exports = {
   mode: 'development',
-  entry: './src/A020-this-em-funcoes/A020-this-em-funcoes.ts',
+  entry: './src/A019-exercicio/A019-exercicio.ts',
   devtool: 'source-map',
   module: {
     rules: [
