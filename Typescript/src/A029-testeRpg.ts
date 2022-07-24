@@ -1,18 +1,59 @@
 /* Mini-sistema de combate "RPG"
- * Feito para testar funcionamento de classe abstrata
+ * Feito para testar funcionamento de classe abstrata, interfaces
  * OBS: Batalha épica f kadum nt
  */
 
-export abstract class Character {
-  constructor(
-    protected nick: string,
-    protected ad: number,
-    protected ap: number,
-    protected def: number,
-    protected hp: number,
-  ) {}
+// interface attributes
+interface CharacterInterface {
+  nick: string;
+  ad: number;
+  ap: number;
+  def: number;
+  hp: number;
+}
 
-  abstract equipment: { weapon: Weapon; armor: Armor };
+// interface actions
+interface CharacterActionsInterface {
+  attack(character: Character): void;
+  loseHp(damage: number): void;
+  equipItem(item: Item): void;
+}
+
+interface EquipmentInterface {
+  weapon: Weapon;
+  armor: Armor;
+}
+
+interface ItemInterface {
+  name: string;
+  description: string;
+}
+
+interface WeaponInterface {
+  ad: number;
+  ap: number;
+}
+
+interface ArmorInterface {
+  def: number;
+}
+
+export abstract class Character implements CharacterActionsInterface {
+  constructor(protected characterInterface: CharacterInterface) {
+    this.nick = characterInterface.nick;
+    this.ad = characterInterface.ad;
+    this.ap = characterInterface.ap;
+    this.def = characterInterface.def;
+    this.hp = characterInterface.hp;
+  }
+
+  protected nick: string;
+  protected ad: number;
+  protected ap: number;
+  protected def: number;
+  protected hp: number;
+
+  abstract equipment: EquipmentInterface;
 
   attack(character: Character): void {
     const skill = this.ad >= this.ap ? this.ad : this.ap;
@@ -32,7 +73,7 @@ export abstract class Character {
     this.hp -= damage;
   }
 
-  equipItem(item: Item) {
+  equipItem(item: Item): void {
     if (item instanceof Weapon) {
       this.equipment.weapon = item;
       this.ad = this.equipment.weapon._ad;
@@ -46,18 +87,27 @@ export abstract class Character {
 }
 
 class Item {
-  constructor(protected name: string, protected description: string) {}
+  constructor(protected itemInterface: ItemInterface) {
+    this.name = itemInterface.name;
+    this.description = itemInterface.description;
+  }
+
+  name: string;
+  description: string;
 }
 
 class Weapon extends Item {
   constructor(
-    name: string,
-    description: string,
-    protected ad: number,
-    protected ap: number,
+    protected itemInterface: ItemInterface,
+    protected weaponInterface: WeaponInterface,
   ) {
-    super(name, description);
+    super(itemInterface);
+    this.ad = weaponInterface.ad;
+    this.ap = weaponInterface.ap;
   }
+
+  protected ad: number;
+  protected ap: number;
 
   get _ad(): number {
     return this.ad;
@@ -69,9 +119,12 @@ class Weapon extends Item {
 }
 
 class Armor extends Item {
-  constructor(name: string, description: string, protected def: number) {
-    super(name, description);
+  constructor(itemInterface: ItemInterface, armorInterface: ArmorInterface) {
+    super(itemInterface);
+    this.def = armorInterface.def;
   }
+
+  protected def: number;
 
   get _def(): number {
     return this.def;
@@ -80,20 +133,67 @@ class Armor extends Item {
 
 class Mage extends Character {
   equipment = {
-    weapon: new Weapon('Common Staff', 'A common staff used by novices', 1, 2),
-    armor: new Armor('Common Cloth', 'A common cloth used by newbies haha', 1),
+    weapon: new Weapon(
+      {
+        name: 'Common Staff',
+        description: 'A common staff used by novices',
+      },
+      {
+        ad: 1,
+        ap: 2,
+      },
+    ),
+    armor: new Armor(
+      {
+        name: 'Common Cloth',
+        description: 'A common cloth used by newbies haha',
+      },
+      {
+        def: 1,
+      },
+    ),
   };
 }
 
 class Rogue extends Character {
   equipment = {
-    weapon: new Weapon('Common Dagger', 'A dagger used to slice oranges', 2, 1),
-    armor: new Armor('Common Cloth', 'A common cloth used by newbies haha', 1),
+    weapon: new Weapon(
+      {
+        name: 'Common Dagger',
+        description: 'A dagger used to slice oranges',
+      },
+      {
+        ad: 2,
+        ap: 1,
+      },
+    ),
+    armor: new Armor(
+      {
+        name: 'Common Cloth',
+        description: 'A common cloth used by newbies haha',
+      },
+      {
+        def: 1,
+      },
+    ),
   };
 }
 
-const kadum = new Mage('Kadum Kadaum', 1, 2, 1, 15);
-const belle = new Rogue('Belle Belinha', 2, 1, 1, 10);
+const kadum = new Mage({
+  nick: 'Kadum Kadaum',
+  ad: 1,
+  ap: 2,
+  def: 1,
+  hp: 15,
+});
+
+const belle = new Rogue({
+  nick: 'Belle Belinha',
+  ad: 2,
+  ap: 1,
+  def: 1,
+  hp: 10,
+});
 
 /**
  * Nick: AD, AP, DEF, HP
@@ -117,7 +217,17 @@ kadum.attack(belle);
  * Belle: 2, 1, 1, 8
  */
 
-belle.equipItem(new Armor('Armor plate', 'A good one', 2));
+belle.equipItem(
+  new Armor(
+    {
+      name: 'Armor plate',
+      description: 'A good one',
+    },
+    {
+      def: 2,
+    },
+  ),
+);
 /**
  * Kadum: 1, 2, 1, 15
  * Belle: 2, 1, 2, 8
@@ -130,7 +240,16 @@ kadum.attack(belle);
  */
 
 kadum.equipItem(
-  new Weapon('Uncommon Staff', 'Used by Gandalf when was 7', 1, 4),
+  new Weapon(
+    {
+      name: 'Uncommon Staff',
+      description: 'Used by Gandalf when was 7',
+    },
+    {
+      ad: 1,
+      ap: 4,
+    },
+  ),
 );
 /**
  * Kadum: 1, 4, 1, 15
@@ -144,7 +263,16 @@ kadum.attack(belle);
  */
 
 belle.equipItem(
-  new Weapon('Hidden Blade', 'Nothing is true, everything is permitted', 32, 1),
+  new Weapon(
+    {
+      name: 'Hidden Blade',
+      description: 'Nothing is true, everything is permitted',
+    },
+    {
+      ad: 32,
+      ap: 1,
+    },
+  ),
 );
 
 /**
