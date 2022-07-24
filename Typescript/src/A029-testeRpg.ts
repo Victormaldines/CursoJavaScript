@@ -3,7 +3,7 @@
  * OBS: Batalha épica f kadum nt
  */
 
-// interface attributes
+// character interface attributes
 interface CharacterInterface {
   nick: string;
   ad: number;
@@ -12,18 +12,20 @@ interface CharacterInterface {
   hp: number;
 }
 
-// interface actions
-interface CharacterActionsInterface {
+// character interface methods
+interface CharacterMethodsInterface {
   attack(character: Character): void;
   loseHp(damage: number): void;
   equipItem(item: Item): void;
 }
 
+// equipment interface
 interface EquipmentInterface {
   weapon: Weapon;
   armor: Armor;
 }
 
+// item interfaces
 interface ItemInterface {
   name: string;
   description: string;
@@ -38,7 +40,7 @@ interface ArmorInterface {
   def: number;
 }
 
-export abstract class Character implements CharacterActionsInterface {
+export abstract class Character implements CharacterMethodsInterface {
   constructor(protected characterInterface: CharacterInterface) {
     this.nick = characterInterface.nick;
     this.ad = characterInterface.ad;
