@@ -5,7 +5,7 @@
 
 // character interface attributes
 interface CharacterInterface {
-  nick: string;
+  readonly nick: string;
   ad: number;
   ap: number;
   def: number;
@@ -28,7 +28,7 @@ interface EquipmentInterface {
 // item interfaces
 interface ItemInterface {
   name: string;
-  description: string;
+  readonly description: string;
 }
 
 interface WeaponInterface {
@@ -42,28 +42,28 @@ interface ArmorInterface {
 
 export abstract class Character implements CharacterMethodsInterface {
   constructor(protected characterInterface: CharacterInterface) {
-    this.nick = characterInterface.nick;
-    this.ad = characterInterface.ad;
-    this.ap = characterInterface.ap;
-    this.def = characterInterface.def;
-    this.hp = characterInterface.hp;
+    this._nick = characterInterface.nick;
+    this._ad = characterInterface.ad;
+    this._ap = characterInterface.ap;
+    this._def = characterInterface.def;
+    this._hp = characterInterface.hp;
   }
 
-  protected nick: string;
-  protected ad: number;
-  protected ap: number;
-  protected def: number;
-  protected hp: number;
+  protected _nick: string;
+  protected _ad: number;
+  protected _ap: number;
+  protected _def: number;
+  protected _hp: number;
 
   abstract equipment: EquipmentInterface;
 
   attack(character: Character): void {
-    const skill = this.ad >= this.ap ? this.ad : this.ap;
+    const skill = this._ad >= this._ap ? this._ad : this._ap;
     const damage = skill - character.def > 0 ? skill - character.def : 0;
 
     if (character.hp > 0) {
       character.loseHp(damage);
-      console.log(`${this.nick} deals ${damage} damage to ${character.nick}`);
+      console.log(`${this._nick} deals ${damage} damage to ${character.nick}`);
       console.log(`${character.nick} has now ${character.hp}`);
     }
     if (character.hp <= 0) {
@@ -72,64 +72,95 @@ export abstract class Character implements CharacterMethodsInterface {
   }
 
   loseHp(damage: number): void {
-    this.hp -= damage;
+    this._hp -= damage;
   }
 
   equipItem(item: Item): void {
     if (item instanceof Weapon) {
       this.equipment.weapon = item;
-      this.ad = this.equipment.weapon._ad;
-      this.ap = this.equipment.weapon._ap;
+      this._ad = this.equipment.weapon.ad;
+      this._ap = this.equipment.weapon.ap;
     }
     if (item instanceof Armor) {
       this.equipment.armor = item;
-      this.def = this.equipment.armor._def;
+      this._def = this.equipment.armor.def;
     }
+  }
+
+  get nick(): string {
+    return this._nick;
+  }
+
+  get ad(): number {
+    return this._ad;
+  }
+
+  get ap(): number {
+    return this._ap;
+  }
+
+  get def(): number {
+    return this._def;
+  }
+
+  get hp(): number {
+    return this._hp;
   }
 }
 
 class Item {
   constructor(protected itemInterface: ItemInterface) {
-    this.name = itemInterface.name;
-    this.description = itemInterface.description;
+    this._name = itemInterface.name;
+    this._description = itemInterface.description;
   }
 
-  name: string;
-  description: string;
+  protected _name: string;
+  protected _description: string;
+
+  get name(): string {
+    return this._name;
+  }
+
+  get description(): string {
+    return this._description;
+  }
 }
 
 class Weapon extends Item {
   constructor(
     protected itemInterface: ItemInterface,
-    protected weaponInterface: WeaponInterface,
+    weaponInterface: WeaponInterface,
   ) {
     super(itemInterface);
-    this.ad = weaponInterface.ad;
-    this.ap = weaponInterface.ap;
+    this._ad = weaponInterface.ad;
+    this._ap = weaponInterface.ap;
   }
 
-  protected ad: number;
-  protected ap: number;
+  protected _ad: number;
+  protected _ap: number;
 
-  get _ad(): number {
-    return this.ad;
+  get ad(): number {
+    return this._ad;
   }
 
-  get _ap(): number {
-    return this.ap;
+  get ap(): number {
+    return this._ap;
   }
 }
 
 class Armor extends Item {
-  constructor(itemInterface: ItemInterface, armorInterface: ArmorInterface) {
+  constructor(
+    protected itemInterface: ItemInterface,
+    protected armorInterface: ArmorInterface,
+  ) {
     super(itemInterface);
-    this.def = armorInterface.def;
+    this._def = armorInterface.def;
   }
 
-  protected def: number;
+  protected _def: number;
 
-  get _def(): number {
-    return this.def;
+  get def(): number {
+    return this._def;
   }
 }
 
@@ -293,3 +324,6 @@ belle.attack(kadum);
  * Kadum: 1, 2, 1, -16 *já está morto*
  * Belle: 32, 1, 2, 6
  */
+
+console.log(belle.equipment.weapon.name);
+console.log(belle.equipment);
