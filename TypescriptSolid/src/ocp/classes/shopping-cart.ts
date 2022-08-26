@@ -23,22 +23,7 @@ export class ShoppingCart {
   }
 
   totalWithDiscount(): number {
-    /**
-     * this.discount.calculate()
-     * funciona de maneira polimórfica:
-     * Porque "Eu espero que qualquer Discount tenha o método calculate e que faça o cálculo
-     * de acordo com o método"
-     * "Esperar que algo se comporte de maneiro polimórfica"
-     */
-
     return this.discount.calculate(this.total());
-
-    /* Se eu preciso checar o tipo do retorno de uma função de uma classe criada, em algum
-     * momento o Lsp (Liskov Substitution Principle) está sendo quebrado
-     */
-    //const result = this.discount.calculate(this.total());
-    // if (typeof result === 'number') return result;
-    // return this.total();
   }
 
   isEmpty(): boolean {

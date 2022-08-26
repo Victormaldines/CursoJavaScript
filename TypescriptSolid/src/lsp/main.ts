@@ -1,10 +1,15 @@
 /**
- * Open/Closed Principle
+ * Liskov Substitution Principle
  *
- * Entidades (classes, módulos, fuções, métodos)
- * devem estar abertas para extensão, mas fechadas para modificação
+ * Definição:
+ * Liskov Substitution Principle (Princípio da substituição de Liskov) -
+ * Se Φ(x) é uma propriedade demonstrável dos objetos x de tipo T. Então Φ(y)
+ * deve ser verdadeiro para objetos y de tipo S onde S é um subtipo de T.
  *
- * "ou seja, não devemos ficar mexendo em nosso source code"
+ * Mais simples: Substipos precisa ser substituíveis por seus tipos de base.
+ * Definição do Luiz: Se meu programa espera um Animal, algo do tipo Dog
+ * (que herda de Animal) seve servir como qualquer outro animal.
+ *
  */
 
 import { ShoppingCart } from './classes/shopping-cart';
@@ -16,12 +21,12 @@ import { Persistency } from './services/persistency';
 import {
   FiftyPercentDiscount,
   //TenPercentDiscount,
-  //NoDiscount,
+  // NoDiscount,
 } from './classes/discount';
 
 const fiftyPercentDiscount = new FiftyPercentDiscount();
 //const tenPercentDiscount = new TenPercentDiscount();
-//const noDiscount = new NoDiscount();
+// const noDiscount = new NoDiscount();
 
 const shoppingCart = new ShoppingCart(fiftyPercentDiscount);
 const messaging = new Messaging();

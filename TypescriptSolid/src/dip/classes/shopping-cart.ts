@@ -1,7 +1,8 @@
-import { CartItem } from './interfaces/cart-item';
-import { Discount } from './discount';
+import { CartItem } from './interfaces/cart-item'; // interface (protocolo)
+import { Discount } from './discount'; // classe abstrata (protocolo)
+import { ShoppingCartProtocol } from './interfaces/shopping-cart-protocol'; // interface (protocolo)
 
-export class ShoppingCart {
+export class ShoppingCart implements ShoppingCartProtocol {
   private readonly _items: CartItem[] = [];
 
   // Injeção de dependências
