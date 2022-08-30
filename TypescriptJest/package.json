@@ -1,5 +1,8 @@
 {
-  "scripts": {},
+  "scripts": {
+    "test": "jest",
+    "test:silent" : "jest --watchAll --silent --noStackTrace"
+  },
   "devDependencies": {
     "@types/jest": "^28.1.8",
     "@types/node": "^18.7.6",
